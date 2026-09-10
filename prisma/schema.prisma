@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  image     String?
+  createdAt DateTime  @default(now())
+
+  payments  Payment[]
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  clientName String
+  service    String
+  amount     Decimal       @db.Decimal(10, 2)
+  dueDate    DateTime
+  status     PaymentStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([dueDate])
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}

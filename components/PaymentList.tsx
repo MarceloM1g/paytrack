@@ -42,6 +42,7 @@ export default function PaymentList() {
   const [openForm, setOpenForm] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function getPaymentList() {
     try {
@@ -58,6 +59,8 @@ export default function PaymentList() {
       setPaymentList(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -139,6 +142,12 @@ export default function PaymentList() {
         </button>
       </div>
 
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent" />
+        </div>
+      )}
+
       {openForm && (
         <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -161,7 +170,7 @@ export default function PaymentList() {
       )}
 
       <div className="space-y-3">
-        {paymentList.length === 0 && (
+        {!loading && paymentList.length === 0 && (
           <div className="bg-[#111] border border-[#333] rounded-xl p-8 text-center">
             <h3 className="text-lg font-medium text-white">
               Nenhum pagamento cadastrado

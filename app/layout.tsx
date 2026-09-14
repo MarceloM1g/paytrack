@@ -4,7 +4,19 @@ import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "PayTrack",
-  description: "Controle pagamentos, acompanhe vencimentos e gerencie cobranças de forma simples e segura.",
+  description:
+    "Controle pagamentos, acompanhe vencimentos e gerencie cobranças de forma simples e segura.",
+
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
+
+  appleWebApp: {
+    capable: true,
+    title: "PayTrack",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({

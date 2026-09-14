@@ -21,6 +21,7 @@ export default function PaymentForm({ onSuccess, payment }: PaymentFormProps) {
   const [service, setService] = useState("");
   const [serviceValue, setServiceValue] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const today = new Date();
   const todayString = [
@@ -34,6 +35,9 @@ export default function PaymentForm({ onSuccess, payment }: PaymentFormProps) {
       alert("Preencha todos os campos.");
       return;
     }
+
+    if (isLoading) return;
+    setIsLoading(true);
 
     try {
       let response;
@@ -75,6 +79,8 @@ export default function PaymentForm({ onSuccess, payment }: PaymentFormProps) {
       onSuccess();
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -155,8 +161,37 @@ export default function PaymentForm({ onSuccess, payment }: PaymentFormProps) {
         />
       </div>
 
-      <button type="submit">
-        {payment ? "Salvar Alterações" : "Criar Pagamento"}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="
+    w-full
+    flex
+    items-center
+    justify-center
+    gap-2
+    bg-white
+    text-black
+    font-medium
+    py-2.5
+    rounded-lg
+    transition-all
+    duration-200
+    hover:bg-white/90
+    disabled:opacity-50
+    disabled:cursor-not-allowed
+  "
+      >
+        {isLoading ? (
+          <>
+            <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+            <span>Salvando...</span>
+          </>
+        ) : payment ? (
+          "Salvar Alterações"
+        ) : (
+          "Criar Pagamento"
+        )}
       </button>
     </form>
   );

@@ -161,6 +161,18 @@ export default function PaymentList() {
       )}
 
       <div className="space-y-3">
+        {paymentList.length === 0 && (
+          <div className="bg-[#111] border border-[#333] rounded-xl p-8 text-center">
+            <h3 className="text-lg font-medium text-white">
+              Nenhum pagamento cadastrado
+            </h3>
+
+            <p className="text-white/50 mt-2">
+              Crie seu primeiro pagamento para começar a acompanhar cobranças.
+            </p>
+          </div>
+        )}
+
         {paymentList.map((payment) => {
           const status = statusConfig[payment.status];
 

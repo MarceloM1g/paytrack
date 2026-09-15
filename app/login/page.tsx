@@ -1,11 +1,12 @@
 import { signIn } from "@/auth";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
       <div className="w-full max-w-md">
         <div className="mb-10 text-center">
-{/*           <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black">
+          {/*           <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black">
             <span className="text-xl font-bold">✦</span>
           </div> */}
 
@@ -59,10 +60,9 @@ export default function LoginPage() {
               Continuar com Google
             </button>
           </form>
-
         </div>
 
- {/*        <p className="mt-8 text-center text-xs text-zinc-600">
+        {/*        <p className="mt-8 text-center text-xs text-zinc-600">
           © 2026 · Todos os direitos reservados
         </p> */}
       </div>

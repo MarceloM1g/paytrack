@@ -44,6 +44,13 @@ export default function PaymentList() {
   const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [filter, setFilter] = useState<"ALL" | "PENDING" | "PAID">("ALL");
+
+  const filteredPayments =
+    filter === "ALL"
+      ? paymentList
+      : paymentList.filter((payment) => payment.status === filter);
+
   async function getPaymentList() {
     try {
       const response = await fetch("/api/payment-list", {
@@ -128,18 +135,38 @@ export default function PaymentList() {
   }
 
   return (
-    <main className="p-6 max-w-2xl mx-auto">
-      <div>
+    <main className="max-w-5xl mx-auto border border-[#333] p-6 mt-4 rounded-2xl">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <button
           onClick={() => {
             setEditingPayment(null);
             setOpenForm(true);
           }}
-          className="inline-flex items-center gap-2 bg-[#f7f7f7] text-[#111] px-4 py-2 rounded-full mb-4 font-medium text-base hover:bg-[#111] hover:text-[#f7f7f7] active:scale-[0.98] transition-all duration-300"
+          className="inline-flex items-center gap-2 bg-[#f7f7f7] text-[#111] px-4 py-2 rounded-full font-medium text-base hover:bg-[#111] hover:text-[#f7f7f7] active:scale-[0.98] transition-all duration-300"
         >
           <span className="text-lg leading-none">+</span>
           Criar Pagamento
         </button>
+
+        <div className="flex items-center gap-1 rounded-full bg-white/[0.04] ring-1 ring-white/[0.07] p-1">
+          {[
+            { label: "Todos", value: "ALL" },
+            { label: "Pendentes", value: "PENDING" },
+            { label: "Pagos", value: "PAID" },
+          ].map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setFilter(tab.value as "ALL" | "PENDING" | "PAID")}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                filter === tab.value
+                  ? "bg-[#f7f7f7] text-[#111]"
+                  : "text-white/50 hover:text-white/90"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {loading && (
@@ -170,19 +197,25 @@ export default function PaymentList() {
       )}
 
       <div className="space-y-3">
-        {!loading && paymentList.length === 0 && (
+        {!loading && filteredPayments.length === 0 && (
           <div className="bg-[#111] border border-[#333] rounded-xl p-8 text-center">
             <h3 className="text-lg font-medium text-white">
-              Nenhum pagamento cadastrado
+              {filter === "ALL"
+                ? "Nenhum pagamento cadastrado"
+                : filter === "PENDING"
+                  ? "Nenhum pagamento pendente"
+                  : "Nenhum pagamento pago"}
             </h3>
 
             <p className="text-white/50 mt-2">
-              Crie seu primeiro pagamento para começar a acompanhar cobranças.
+              {filter === "ALL"
+                ? "Crie seu primeiro pagamento para começar a acompanhar cobranças."
+                : "Não há pagamentos nesta categoria."}
             </p>
           </div>
         )}
 
-        {paymentList.map((payment) => {
+        {filteredPayments.map((payment) => {
           const status = statusConfig[payment.status];
 
           return (

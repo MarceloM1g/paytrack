@@ -1,14 +1,12 @@
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen items-center justify-center">
-      <Link
-        href="/login"
-        className="rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800"
-      >
-        Ir para Login
-      </Link>
-    </main>
-  );
+export default async function Home() {
+  const session = await auth();
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
+  redirect("/login");
 }
